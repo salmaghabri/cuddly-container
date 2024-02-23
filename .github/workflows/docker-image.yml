@@ -5,7 +5,7 @@ on:
     branches:
       - master
 env:
-  USERNAME: ${{ secrets.USERNAME }}
+  USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
       
       # Login to DockerHub
       - name: Login to DockerHub
-        run: echo $DOCKER_TOKEN | docker login -u $USERNAME --password-stdin
+        run: docker login -u $USERNAME --password $DOCKER_TOKEN
       
       # Build and push Docker image
       - name: Build and push Docker image
