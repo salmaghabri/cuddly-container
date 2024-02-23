@@ -1,0 +1,29 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - master
+env:
+  USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build and test
+        run: ./mvnw clean package
+      
+      # Login to DockerHub
+      - name: Login to DockerHub
+        run: docker login -u $USERNAME --password $DOCKER_TOKEN
+      
+      # Build and push Docker image
+      - name: Build and push Docker image
+        run: |
+          docker build -t salmaghabri/with-ga:latest .
+          docker push salmaghabri/with-ga:latest
