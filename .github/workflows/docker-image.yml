@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: Build and Push Docker Image
 
 on:
   push:
@@ -6,20 +6,22 @@ on:
       - master
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
-
+      
+      # Login to DockerHub
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build Docker image
-        run: docker build -t salmaghabri/with-ga:latest .
-
-      - name: Push Docker image to Docker Hub
-        run: docker push salmaghabri/with-ga:latest
+      
+      # Build and push Docker image
+      - name: Build and push Docker image
+        run: |
+          docker build -t salmaghabri/with-ga:latest .
+          docker push salmaghabri/with-ga:latest
