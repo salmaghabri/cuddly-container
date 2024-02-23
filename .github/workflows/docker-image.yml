@@ -1,0 +1,22 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t salmaghabri/with-ga:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push salmaghabri/with-ga:latest
